@@ -16,7 +16,7 @@ public class testOperations {
 			user = read.next();
 			
 			if(user.equals("admin")) {
-				System.out.println("System not currently online, would you like to start it? (y/N)");
+				System.out.println("System not currently online, would you like to start it? (y/n)");
 				if(read.next().equals("y")) {
 					System.out.println("System started successfully.");
 					online = true;
@@ -34,9 +34,21 @@ public class testOperations {
 				if(user.equals("admin")) {
 					System.out.println("Here is a list of commands: \n"
 							+ "stop -> truns off the system and exits command line\n"
-							+ "read filename.txt -> reads course file 'filename'\n"
+							+ "read file-> reads course file 'filename'\n"
 							+ "exit -> returns to login screen while keeping system online");
-				
+					if(command.equals("stop")) {
+						System.out.println("System shutting down. Goodbye.");
+						online = false;
+						break;
+					}else if(command.equals("exit")) {
+						System.out.println("Logging out. Goodbye.");
+						break;
+					}else if(command.equals("read file")) {
+						String filename = read.next();
+						System.out.println("Enter the filename: (ie. filename.txt)");
+					}else {
+						System.out.println("Invalid command");
+					}
 				
 				} else if(user.equals("instructor")) {
 					System.out.println("Here is a list of commands: \n"
@@ -50,6 +62,10 @@ public class testOperations {
 					System.out.println("Invalid user type");
 					break;
 				}
+			}
+			
+			if(!online) {
+				break;
 			}
 			
 			user = "";
