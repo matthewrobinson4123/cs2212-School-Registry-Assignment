@@ -30,20 +30,21 @@ public class testOperations {
 		}
 		
 		while(online) {
+			
 			while(!command.equals("exit")) {
-				command = read.next();
+				
 				if(user.equals("admin")) {
 					System.out.println("Here is a list of commands: \n"
 							+ "stop -> truns off the system and exits command line\n"
 							+ "read file-> reads course file 'filename'\n"
 							+ "exit -> returns to login screen while keeping system online");
+					command = read.next();
 					if(command.equals("stop")) {
 						System.out.println("System shutting down. Goodbye.");
 						online = false;
 						break;
 					}else if(command.equals("exit")) {
 						System.out.println("Logging out. Goodbye.");
-						break;
 					}else if(command.equals("read file")) {
 						String filename = read.next();
 						System.out.println("Enter the filename: (ie. filename.txt)");
@@ -68,6 +69,7 @@ public class testOperations {
 			if(!online) {
 				break;
 			}
+			command = "";
 			
 			user = "";
 			System.out.println("Enter user type: ");
