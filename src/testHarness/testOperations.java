@@ -29,22 +29,17 @@ public class testOperations {
 		}
 		
 		while(online) {
-			
-			if(user.equals("admin")) {
-				System.out.println("Here is a list of commands: \n"
-						+ "stop -> truns off the system and exits command line\n"
-						+ "read filename.txt -> reads course file 'filename'\n"
-						+ "exit -> returns to login screen while keeping system online");
-				while(!command.equals("exit")) {
-					command = read.next();
-				}
-				user = "";
+			while(!command.equals("exit")) {
+				command = read.next();
+				if(user.equals("admin")) {
+					System.out.println("Here is a list of commands: \n"
+							+ "stop -> truns off the system and exits command line\n"
+							+ "read filename.txt -> reads course file 'filename'\n"
+							+ "exit -> returns to login screen while keeping system online");
 				
-			} else {
-				System.out.println("Enter user type: ");
-				user = read.next();
 				
-				if(user.equals("instructor")) {
+				
+				} else if(user.equals("instructor")) {
 					System.out.println("Here is a list of commands: \n"
 							+ "");
 					
@@ -54,11 +49,18 @@ public class testOperations {
 					
 				} else {
 					System.out.println("Invalid user type");
+					break;
 				}
 			}
+			
+			user = "";
+			System.out.println("Enter user type: ");
+			user = read.next();
+			
 		}
 		
 		read.close();
+		
 		
 	}
 }
