@@ -38,7 +38,6 @@ public class testOperations {
 							+ "exit -> returns to login screen while keeping system online");
 				
 				
-				
 				} else if(user.equals("instructor")) {
 					System.out.println("Here is a list of commands: \n"
 							+ "");
