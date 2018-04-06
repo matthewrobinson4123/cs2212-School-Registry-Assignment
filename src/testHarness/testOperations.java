@@ -20,6 +20,7 @@ public class testOperations {
 				if(read.next().equals("y")) {
 					System.out.println("System started successfully.");
 					online = true;
+					break;
 				} else {
 					System.out.println("Goodbye");
 				}
