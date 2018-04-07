@@ -8,6 +8,7 @@ import java.util.*;
 
 import customDatatypes.NotificationTypes;
 import offerings.CourseOffering;
+import offerings.ICourseOffering;
 import offerings.OfferingFactory;
 import systemUsers.AdminModel;
 import systemUsers.InstructorModel;
@@ -31,6 +32,12 @@ public class testOperations {
 		InstructorModel instructor = null;
 		Boolean online = false;
 		
+		AdminModel defaultAdmin = new AdminModel();
+		defaultAdmin.setName("default");
+		defaultAdmin.setSurname("admin");
+		defaultAdmin.setID("1");
+		adminList.add(defaultAdmin);
+		
 		while(!online) {
 			
 			System.out.println("Enter user type: ");
@@ -38,15 +45,17 @@ public class testOperations {
 			
 			if(userType.equals("admin")) {
 				admin = adminLogin();
-				System.out.println("System not currently online, would you like to start it? (y/n)");
-				if(read.next().equals("y")) {
-					System.out.println("System started successfully.");
-					online = true;
+				if(!adminList.contains(admin)) {
+					System.out.println("You are not an authorized administrator");
 				} else {
-					System.out.println("Goodbye");
+					System.out.println("System not currently online, would you like to start it? (y/n)");
+					if(read.next().equals("y")) {
+						System.out.println("System started successfully.");
+						online = true;
+					} else {
+						System.out.println("Goodbye");
+					}
 				}
-			} else {
-				System.out.println("System not currently online, please contact an administrator");
 			}
 		}
 		
@@ -87,6 +96,41 @@ public class testOperations {
 						
 						System.out.println("Logging out. Goodbye.");
 						admin = null;
+						break;
+						
+					case "enroll student":
+						
+						StudentModel studentEnroll = null;
+						CourseOffering course = null;
+						String ID = read.next();
+						
+						System.out.println("Enter the ID number of the student you wish to enroll: ");
+						
+						
+						for(StudentModel stu : studentList) {
+							if(stu.getID() == ID) studentEnroll = stu; 
+						}
+						
+						if(studentEnroll == null) {
+							System.out.print("Student not found");
+						} else {
+							
+							System.out.println("Enter course ID to enroll student in");
+							ID = read.next();
+							
+							for(CourseOffering off : courseList) {
+								if(off.getCourseID() == ID) course = off;
+							}
+							
+							if(course == null) {
+								System.out.println("Not a valid course code");
+							} else {
+								List<ICourseOffering> courses = studentEnroll.getCoursesEnrolled();
+								courses.add(course);
+								studentEnroll.setCoursesEnrolled(courses);
+								System.out.println("Student enrolled in course");
+							}
+						}
 						break;
 						
 					default:
