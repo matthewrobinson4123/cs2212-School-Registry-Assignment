@@ -48,7 +48,6 @@ public class testOperations {
 			while(!command.equals("exit")) {
 				
 				if(userType.equals("admin")) {
-					if(admin == null) admin = adminLogin();
 					System.out.println("Here is a list of commands: \n"
 							+ "stop -> truns off the system and exits command line\n"
 							+ "read file-> reads course file 'filename'\n"
@@ -69,15 +68,25 @@ public class testOperations {
 					}
 				
 				} else if(userType.equals("instructor")) {
-					instructor = instructorLogin();
 					System.out.println("Here is a list of commands: \n"
-							+ "");
-					
+							+ "exit -> returns to login screen while keeping system online");
+					if(command.equals("exit")) {
+						System.out.println("Logging out. Goodbye.");
+						instructor = null;
+					}
+					else {
+						System.out.println("Invalid command");
+					}
 				} else if(userType.equals("student")) {
-					student = studentLogin();
 					System.out.println("Here is a list of commands: \n"
-							+ "");
-					
+							+ "exit -> returns to login screen while keeping system online");
+					if(command.equals("exit")) {
+						System.out.println("Logging out. Goodbye.");
+						student = null;
+					}
+					else {
+						System.out.println("Invalid command");
+					}
 				} else {
 					System.out.println("Invalid user type");
 					break;
@@ -92,6 +101,13 @@ public class testOperations {
 			userType = "";
 			System.out.println("Enter user type: ");
 			userType = read.next();
+			
+			if(userType.equals("admin"))
+				admin = adminLogin();
+			else if(userType.equals("instructor"))
+				instructor = instructorLogin();
+			else if(userType.equals("student"))
+				student = studentLogin();
 			
 			
 		}
