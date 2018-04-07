@@ -1,6 +1,7 @@
 package testHarness;
 import java.util.*;
 
+import customDatatypes.NotificationTypes;
 import offerings.CourseOffering;
 import systemUsers.AdminModel;
 import systemUsers.InstructorModel;
@@ -9,10 +10,10 @@ import systemUsers.SystemUser;
 
 public class testOperations {
 	
-	ArrayList<StudentModel> studentList = new ArrayList<StudentModel>();
-	ArrayList<CourseOffering> courseList = new ArrayList<CourseOffering>();
-	ArrayList<AdminModel> adminList = new ArrayList<AdminModel>();
-	ArrayList<InstructorModel> instructorList = new ArrayList<InstructorModel>();
+	private static ArrayList<StudentModel> studentList = new ArrayList<StudentModel>();
+	private static ArrayList<CourseOffering> courseList = new ArrayList<CourseOffering>();
+	private static ArrayList<AdminModel> adminList = new ArrayList<AdminModel>();
+	private static ArrayList<InstructorModel> instructorList = new ArrayList<InstructorModel>();
 	static Scanner read = new Scanner(System.in);
 	
 	public static void main(String[] args) {
@@ -78,13 +79,109 @@ public class testOperations {
 						System.out.println("Invalid command");
 					}
 				} else if(userType.equals("student")) {
+					
 					System.out.println("Here is a list of commands: \n"
+							+ "enroll -> enroll in a course\n"
+							+ "notify -> change notification preferences\n"
+							+ "print -> print the record for a course you are attending\n"
 							+ "exit -> returns to login screen while keeping system online");
-					if(command.equals("exit")) {
+					
+					boolean done;
+					command = read.next();
+					switch(command) {
+					
+					case "enroll":
+						done = false;
+						while (!done) {
+							System.out.println("Enter the ID for the course you'd like to enroll in or Enter to go back: ");
+							String course_id = read.next();
+							
+							if (course_id.equals("")) // go back to list of commands
+								break;
+							
+							// find the course in the courseList
+							for (CourseOffering course_item : courseList) {
+								if (course_item.getCourseID().equals(course_id)) {
+									done = true;
+									// check if student can take the course then modify both relevant lists
+									if (student.getCoursesAllowed().contains(course_item) 
+											&& course_item.getStudentsAllowedToEnroll().contains(student)) {
+										student.getCoursesEnrolled().add(course_item);
+										course_item.getStudentsEnrolled().add(student);
+									} else {
+										done = false;
+									}
+									break;
+								}
+							}
+							if (!done) // sloppy
+								System.out.println("Invalid course ID, or you cannot enroll in that course.");
+						}
+						
+					case "notify":
+						done = false;
+						while (!done) {
+							
+							System.out.println("Enter your preferred notification type (email, cellphone, pigeon post)"
+									+ "or Enter to exit: ");
+							
+							String notification_type = read.next();
+							switch(notification_type) {
+							
+							case "email":
+								student.setNotificationType(NotificationTypes.EMAIL);
+								
+							case "cellphone":
+								student.setNotificationType(NotificationTypes.CELLPHONE);
+								
+							case "pigeon post":
+								student.setNotificationType(NotificationTypes.PIGEON_POST);
+								
+							case "":
+								done = true;
+								
+							default:
+								System.out.println("Invalid type.");
+							}
+							
+						}
+						
+					case "print":
+						done = false;
+						while (!done) {
+							System.out.println("Enter the ID for the course you'd like to print or Enter to go back: ");
+							String course_id = read.next();
+							
+							if (course_id.equals("")) // go back to list of commands
+								break;
+							
+							// find the course in the courseList
+							for (CourseOffering course_item : courseList) {
+								if (course_item.getCourseID().equals(course_id)) {
+									done = true;
+									// check if student is in the course
+									if (student.getCoursesEnrolled().contains(course_item) 
+											&& course_item.getStudentsEnrolled().contains(student)) {
+										System.out.println(course_item.getCourseName());
+										System.out.println(course_item.getCourseID());
+										System.out.println("Semester " + Integer.toString(course_item.getSemester()));
+										System.out.println("Instructor(s):\n" + course_item.getInstructor());
+										System.out.println("Evaluation:\n" + course_item.getEvaluationStrategies());
+									} else {
+										done = false;
+									}
+									break;
+								}
+							}
+							if (!done) // sloppy
+								System.out.println("Invalid course ID, or you are not enrolled in that course.");
+						}
+						
+					case "exit":
 						System.out.println("Logging out. Goodbye.");
 						student = null;
-					}
-					else {
+						
+					default:
 						System.out.println("Invalid command");
 					}
 				} else {
