@@ -1,8 +1,14 @@
 package testHarness;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 import customDatatypes.NotificationTypes;
 import offerings.CourseOffering;
+import offerings.OfferingFactory;
 import systemUsers.AdminModel;
 import systemUsers.InstructorModel;
 import systemUsers.StudentModel;
@@ -16,7 +22,7 @@ public class testOperations {
 	private static ArrayList<InstructorModel> instructorList = new ArrayList<InstructorModel>();
 	static Scanner read = new Scanner(System.in);
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		String userType = "";
 		String command = "";
@@ -54,17 +60,35 @@ public class testOperations {
 							+ "read file-> reads course file 'filename'\n"
 							+ "exit -> returns to login screen while keeping system online");
 					command = read.next();
-					if(command.equals("stop")) {
+					
+					switch(command) {
+					
+					case "stop":
+						
 						System.out.println("System shutting down. Goodbye.");
 						online = false;
 						break;
-					}else if(command.equals("exit")) {
-						System.out.println("Logging out. Goodbye.");
-						admin = null;
-					}else if(command.equals("read file")) {
+						
+					case "read file":
+						
 						String filename = read.next();
 						System.out.println("Enter the filename: (ie. filename.txt)");
-					}else {
+						
+						// Create an instance of an OfferingFactory
+						OfferingFactory factory = new OfferingFactory();
+						BufferedReader br = new BufferedReader(new FileReader(new File(filename)));
+						// Use the factory to populate as many instances of courses as many files we've got.
+						CourseOffering	courseOffering = factory.createCourseOffering(br);
+						courseList.add(courseOffering);
+						br.close();
+						
+					case "exit":
+						
+						System.out.println("Logging out. Goodbye.");
+						admin = null;
+						
+					default:
+						
 						System.out.println("Invalid command");
 					}
 				
