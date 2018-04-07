@@ -81,15 +81,18 @@ public class testOperations {
 						CourseOffering	courseOffering = factory.createCourseOffering(br);
 						courseList.add(courseOffering);
 						br.close();
+						break;
 						
 					case "exit":
 						
 						System.out.println("Logging out. Goodbye.");
 						admin = null;
+						break;
 						
 					default:
 						
-						System.out.println("Invalid command");
+						System.out.println("Invalid command"); 
+						break;
 					}
 				
 				} else if(userType.equals("instructor")) {
@@ -112,6 +115,7 @@ public class testOperations {
 					
 					boolean done;
 					command = read.next();
+					read.nextLine();
 					switch(command) {
 					
 					case "enroll":
@@ -141,6 +145,7 @@ public class testOperations {
 							if (!done) // sloppy
 								System.out.println("Invalid course ID, or you cannot enroll in that course.");
 						}
+						break;
 						
 					case "notify":
 						done = false;
@@ -149,26 +154,35 @@ public class testOperations {
 							System.out.println("Enter your preferred notification type (email, cellphone, pigeon post)"
 									+ "or Enter to exit: ");
 							
-							String notification_type = read.next();
+	
+							String notification_type = read.nextLine();
 							switch(notification_type) {
 							
-							case "email":
-								student.setNotificationType(NotificationTypes.EMAIL);
+								case "email":
+									student.setNotificationType(NotificationTypes.EMAIL); 
+									break;
 								
-							case "cellphone":
-								student.setNotificationType(NotificationTypes.CELLPHONE);
+								case "cellphone":
+									student.setNotificationType(NotificationTypes.CELLPHONE); 
+									break;
 								
-							case "pigeon post":
-								student.setNotificationType(NotificationTypes.PIGEON_POST);
+								case "pigeon post":
+									student.setNotificationType(NotificationTypes.PIGEON_POST); 
+									break;
 								
-							case "":
-								done = true;
-								
-							default:
-								System.out.println("Invalid type.");
+								case "":
+									System.out.println("Exiting notification settings");
+									done = true; 
+									break;
+									
+								default:
+									System.out.println("Invalid type."); 
+									break;
 							}
 							
+							
 						}
+						break;
 						
 					case "print":
 						done = false;
@@ -200,13 +214,16 @@ public class testOperations {
 							if (!done) // sloppy
 								System.out.println("Invalid course ID, or you are not enrolled in that course.");
 						}
+						break;
 						
 					case "exit":
 						System.out.println("Logging out. Goodbye.");
 						student = null;
+						break;
 						
 					default:
-						System.out.println("Invalid command");
+						System.out.println("Invalid command"); 
+						break;
 					}
 				} else {
 					System.out.println("Invalid user type");
