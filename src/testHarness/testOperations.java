@@ -16,6 +16,7 @@ import systemUsers.AdminModel;
 import systemUsers.InstructorModel;
 import systemUsers.StudentModel;
 import systemUsers.SystemUser;
+import systemUsers.SystemUserModel;
 
 public class testOperations {
 	
@@ -34,30 +35,41 @@ public class testOperations {
 		InstructorModel instructor = null;
 		Boolean online = false;
 		
+	
 		AdminModel defaultAdmin = new AdminModel();
 		defaultAdmin.setName("default");
 		defaultAdmin.setSurname("admin");
 		defaultAdmin.setID("1");
 		adminList.add(defaultAdmin);
-		
+			
 		while(!online) {
 			
 			System.out.println("Enter user type: ");
 			userType = read.next();
-			
-			if(userType.equals("admin")) {
-				admin = adminLogin();
-				if(!adminList.contains(admin)) {
+			read.nextLine();
+			if(userType.equalsIgnoreCase("admin")) {
+				admin = (AdminModel) authenticate("admin");
+
+				if(admin == null) {
 					System.out.println("You are not an authorized administrator");
-				} else {
+				}
+				else {
+									
 					System.out.println("System not currently online, would you like to start it? (y/n)");
-					if(read.next().equals("y")) {
+					if(read.next().equalsIgnoreCase("y")) {
 						System.out.println("System started successfully.");
 						online = true;
+						read.nextLine();
+						break;
 					} else {
 						System.out.println("Goodbye");
 					}
 				}
+				
+				
+			}
+			else {
+				System.out.println("System is currently offline. Contact an administrator.");
 			}
 		}
 		
@@ -70,7 +82,7 @@ public class testOperations {
 							+ "stop -> truns off the system and exits command line\n"
 							+ "read file-> reads course file 'filename'\n"
 							+ "exit -> returns to login screen while keeping system online");
-					read.nextLine();
+					
 					command = read.nextLine();
 					
 					switch(command) {
@@ -79,13 +91,15 @@ public class testOperations {
 						
 						System.out.println("System shutting down. Goodbye.");
 						online = false;
+						command = "exit";
+						admin = null;
 						break;
 						
 					case "read file":
-						
-						String filename = read.next();
 						System.out.println("Enter the filename: (ie. filename.txt)");
-						
+						String filename = read.next();
+						read.nextLine();
+						try {
 						// Create an instance of an OfferingFactory
 						OfferingFactory factory = new OfferingFactory();
 						BufferedReader br = new BufferedReader(new FileReader(new File(filename)));
@@ -94,7 +108,11 @@ public class testOperations {
 						courseList.add(courseOffering);
 						br.close();
 						break;
-						
+						}
+						catch(Exception e) {
+							System.out.println("Invalid file");
+							break;
+						}
 					case "exit":
 						
 						System.out.println("Logging out. Goodbye.");
@@ -466,14 +484,14 @@ public class testOperations {
 						done = false;
 						while (!done) {
 							System.out.println("Enter the ID for the course you'd like to enroll in or Enter to go back: ");
-							String course_id = read.next();
+							String course_id = read.nextLine();
 							
 							if (course_id.equals("")) // go back to list of commands
 								break;
 							
 							// find the course in the courseList
 							for (CourseOffering course_item : courseList) {
-								if (course_item.getCourseID().equals(course_id)) {
+								if (course_item.getCourseID().equalsIgnoreCase(course_id)) {
 									done = true;
 									// check if student can take the course then modify both relevant lists
 									if (student.getCoursesAllowed().contains(course_item) 
@@ -532,14 +550,14 @@ public class testOperations {
 						done = false;
 						while (!done) {
 							System.out.println("Enter the ID for the course you'd like to print or Enter to go back: ");
-							String course_id = read.next();
+							String course_id = read.nextLine();
 							
 							if (course_id.equals("")) // go back to list of commands
 								break;
 							
 							// find the course in the courseList
 							for (CourseOffering course_item : courseList) {
-								if (course_item.getCourseID().equals(course_id)) {
+								if (course_item.getCourseID().equalsIgnoreCase(course_id)) {
 									done = true;
 									// check if student is in the course
 									if (student.getCoursesEnrolled().contains(course_item) 
@@ -583,14 +601,21 @@ public class testOperations {
 			userType = "";
 			System.out.println("Enter user type: ");
 			userType = read.next();
-			
+			read.nextLine();
 			if(userType.equals("admin"))
-				admin = adminLogin();
+				admin = (AdminModel) authenticate(userType);
 			else if(userType.equals("instructor"))
-				instructor = instructorLogin();
+				instructor = (InstructorModel) authenticate(userType);
 			else if(userType.equals("student"))
-				student = studentLogin();
-			
+				student = (StudentModel) authenticate(userType);
+			else {
+				System.out.println("Invalid user type");
+			}
+			if(userType.equals("admin") || userType.equals("instructor") || userType.equals("student"))
+				if(admin == null && student == null && instructor == null) {
+					System.out.println("User not on system");
+					command = "exit";
+				}
 			
 		}
 		
@@ -665,4 +690,48 @@ public class testOperations {
 		
 		return instructor;
 	}
+	
+	private static SystemUserModel authenticate(String user) {
+		AdminModel admin = null;
+		InstructorModel instructor = null;
+		StudentModel student = null;
+		
+		if(user.equals("admin")) {
+			admin = adminLogin();
+			for(AdminModel existingAdmin : adminList) {
+				if(existingAdmin.getID().equalsIgnoreCase(admin.getID()))
+					if(existingAdmin.getName().equalsIgnoreCase(admin.getName()))
+						if(existingAdmin.getSurname().equalsIgnoreCase(admin.getSurname())) {
+								admin = existingAdmin;
+								return admin;
+						}
+			}
+			return null;
+		}else if(user.equals("instructor")) {
+			instructor = instructorLogin();
+			for(InstructorModel existingTutor : instructorList) {
+				if(existingTutor.getID().equalsIgnoreCase(instructor.getID()))
+					if(existingTutor.getName().equalsIgnoreCase(instructor.getName()))
+						if(existingTutor.getSurname().equalsIgnoreCase(instructor.getSurname())) {
+								instructor = existingTutor;
+								return instructor;
+						}
+			}
+			return null;
+		}else if(user.equals("student")) {
+			student = studentLogin();
+			for(StudentModel existingStudent : studentList) {
+				if(existingStudent.getID().equalsIgnoreCase(student.getID()))
+					if(existingStudent.getName().equalsIgnoreCase(student.getName()))
+						if(existingStudent.getSurname().equalsIgnoreCase(student.getSurname())) {
+								student = existingStudent;
+								return student;
+						}
+			}
+			return null;
+		}else {
+			return null;
+		}
+	}
+		
 }
