@@ -79,9 +79,10 @@ public class testOperations {
 				
 				if(userType.equals("admin")) {
 					System.out.println("Here is a list of commands: \n"
-							+ "stop -> truns off the system and exits command line\n"
+							+ "stop -> turns off the system and exits command line\n"
 							+ "read file-> reads course file 'filename'\n"
-							+ "exit -> returns to login screen while keeping system online");
+							+ "exit -> returns to login screen while keeping system online\n"
+							+ "enroll student -> add a student to a class list");
 					
 					command = read.nextLine();
 					
