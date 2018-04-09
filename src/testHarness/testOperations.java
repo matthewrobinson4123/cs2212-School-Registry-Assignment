@@ -913,14 +913,19 @@ public class testOperations {
 											System.out.println("Evaluation type: "
 													+ student.getEvaluationEntities().get(course_item).getText());
 										}
-										System.out.println("Instructor(s):\n" + course_item.getInstructor());
-										System.out.println("Evaluation strategies:\n" + course_item.getEvaluationStrategies());
+										for(InstructorModel inst : instructorList) {
+											if(inst.getIsTutorOf().contains(course_item))
+												System.out.println("Instructor(s):\n" + inst.getName() + " " + inst.getSurname() + " " + inst.getID() + "\n");
+										}
+									
 										if (student.getPerCourseMarks().containsKey(course_item)) {
 											System.out.println("Marks:");
 											Marks marks = student.getPerCourseMarks().get(course_item);
-											Entry<String, Double> next = marks.getNextEntry();
-											while (next != null) {
-												System.out.println(next);
+											marks.initializeIterator();
+											
+											while (marks.hasNext()) {
+												marks.next();
+												System.out.println(marks.getCurrentKey() + ", " + marks.getCurrentValue());
 											}
 										}
 									} else {
