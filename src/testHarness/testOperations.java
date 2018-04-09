@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.Map.Entry;
 
 import customDatatypes.EvaluationTypes;
 import customDatatypes.Marks;
@@ -579,8 +580,20 @@ public class testOperations {
 										System.out.println(course_item.getCourseName());
 										System.out.println(course_item.getCourseID());
 										System.out.println("Semester " + Integer.toString(course_item.getSemester()));
+										if (student.getEvaluationEntities().containsKey(course_item)) {
+											System.out.println("Evaluation type: "
+													+ student.getEvaluationEntities().get(course_item).getText());
+										}
 										System.out.println("Instructor(s):\n" + course_item.getInstructor());
-										System.out.println("Evaluation:\n" + course_item.getEvaluationStrategies());
+										System.out.println("Evaluation strategies:\n" + course_item.getEvaluationStrategies());
+										if (student.getPerCourseMarks().containsKey(course_item)) {
+											System.out.println("Marks:");
+											Marks marks = student.getPerCourseMarks().get(course_item);
+											Entry<String, Double> next = marks.getNextEntry();
+											while (next != null) {
+												System.out.println(next);
+											}
+										}
 									} else {
 										done = false;
 									}
