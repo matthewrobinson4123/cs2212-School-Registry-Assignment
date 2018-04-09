@@ -138,7 +138,7 @@ public class testOperations {
 							List<StudentModel> allowedList = course.getStudentsAllowedToEnroll();
 							System.out.println("Enter the ID of the student you would like to enroll:");
 							ID = read.next();
-							for(StudentModel stu : studentList) {
+							for(StudentModel stu : allowedList) {
 								if(stu.getID().equals(ID)) studentEnroll = stu; 
 							}
 							if(studentEnroll == null) {
