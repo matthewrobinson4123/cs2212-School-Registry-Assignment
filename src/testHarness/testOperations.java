@@ -174,7 +174,7 @@ public class testOperations {
 						
 											
 							boolean done;
-							command = read.next();
+							command = read.nextLine();
 							read.nextLine();
 							switch(command) {
 											
@@ -214,7 +214,7 @@ public class testOperations {
 										}else{
 											System.out.println("Enter the ID for the student you would like to modify a mark for: ");
 										}
-										String student_id = read.next();	
+										String student_id = read.nextLine();	
 										
 										List<StudentModel> students = course.getStudentsEnrolled();
 										boolean isStudent = false;
@@ -236,10 +236,10 @@ public class testOperations {
 											
 											String typeString = eTypes.getText();
 											System.out.println("Please input the evaluation entity:\n" + typeString);
-											String evaluationChanged = read.next();
+											String evaluationChanged = read.nextLine();
 											
 											System.out.println("Please input the mark for the evaluation entity: ");
-											String markString = read.next();
+											String markString = read.nextLine();
 											double evaluationMark = Double.parseDouble(markString);
 											
 											classMarks.addToEvalStrategy(evaluationChanged, evaluationMark);
@@ -299,7 +299,7 @@ public class testOperations {
 										
 										System.out.println("Enter the ID of the student whose final mark you want to calculate: ");
 
-										String student_id = read.next();	
+										String student_id = read.nextLine();	
 										
 										List<StudentModel> students = course.getStudentsEnrolled();
 										boolean isStudent = false;
@@ -347,7 +347,7 @@ public class testOperations {
 
 									System.out.println("Enter the ID for the course you'd like to print records for, or Enter to go back: ");
 
-									String course_id = read.next();
+									String course_id = read.nextLine();
 
 									if (course_id.equals(""))
 										break;
@@ -363,13 +363,13 @@ public class testOperations {
 									if(isTutor == true){
 										
 										System.out.println("To print records for all students input 'all', or 'choose' for individual records: ");
-										String recordType = read.next();
+										String recordType = read.nextLine();
 
 										if(recordType.equals("choose")){
 																						
 											System.out.println("Enter the ID for the student you would like to print records for, or 'exit' to finish: ");
 											
-											String student_id = read.next();
+											String student_id = read.nextLine();
 											
 											while(!student_id.equals("exit")){
 												
