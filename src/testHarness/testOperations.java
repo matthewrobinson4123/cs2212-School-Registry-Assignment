@@ -163,7 +163,9 @@ public class testOperations {
 				
 				} else if(userType.equals("instructor")) {
 					
-					System.out.println("Here is a list of commands: \n"
+					while(true){
+					
+						System.out.println("Here is a list of commands: \n"
 							+ "add -> add a mark for a student in a class you tutor\n"
 							+ "modify -> modify a mark for a student in a class you tutor\n"
 							+ "final -> calculate the final mark for a student in a class you tutor\n"
@@ -463,14 +465,8 @@ public class testOperations {
 								System.out.println("Invalid command");
 								break;
 						
-						
-						
-						
-							
-		
-						//101 to 395
 						}
-							
+					}		
 				} else if(userType.equals("student")) {
 					
 					System.out.println("Here is a list of commands: \n"
