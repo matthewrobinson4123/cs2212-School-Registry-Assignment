@@ -132,7 +132,7 @@ public class testOperations {
 						String ID = read.nextLine();
 						
 						for(CourseOffering off : courseList) {
-							if(off.getCourseID().equals(ID)) course = off;
+							if(off.getCourseID().equalsIgnoreCase(ID)) course = off;
 						}
 						
 						if(course == null) {
@@ -141,8 +141,9 @@ public class testOperations {
 							List<StudentModel> allowedList = course.getStudentsAllowedToEnroll();
 							System.out.println("Enter the ID of the student you would like to enroll:");
 							ID = read.next();
+							read.nextLine();
 							for(StudentModel stu : allowedList) {
-								if(stu.getID().equals(ID)) studentEnroll = stu; 
+								if(stu.getID().equalsIgnoreCase(ID)) studentEnroll = stu; 
 							}
 							if(studentEnroll == null) {
 								System.out.println("Student not found/allowed to enroll");
@@ -170,11 +171,11 @@ public class testOperations {
 							+ "add -> add a mark for a student in a class you tutor\n"
 							+ "modify -> modify a mark for a student in a class you tutor\n"
 							+ "final -> calculate the final mark for a student in a class you tutor\n"
-							+ "print -> print the class record for a class you tutor"
+							+ "print -> print the class record for a class you tutor\n"
  							+ "exit -> returns to login screen while keeping system online");
 						
 							boolean done;
-							command = read.nextLine();
+							command = read.next();
 							read.nextLine();
 							switch(command) {
 											
@@ -185,9 +186,9 @@ public class testOperations {
 									
 									List<ICourseOffering> courses = instructor.getIsTutorOf();
 
-									for(int c = 0; c < courses.size(); c++){
-										System.out.println(courses.get(c).getCourseName() + " " + courses.get(c).getCourseID() + "\n");
-									}
+									//for(int c = 0; c < courses.size(); c++){
+										//System.out.println(courses.get(c).getCourseName() + " " + courses.get(c).getCourseID() + "\n");
+									//}
 									
 									if(command.equals("add")){
 										System.out.println("\nEnter the ID for the course you'd like to add a students mark, or Enter to go back: ");
@@ -201,10 +202,11 @@ public class testOperations {
 																		
 									boolean isTutor = false;
 									ICourseOffering course = null;
-									for(int q = 0; q <courses.size(); q++){
-										if(courses.get(q).getCourseID() == course_id){
+									for(ICourseOffering courseItem : courses){
+										if(courseItem.getCourseID().equalsIgnoreCase(course_id)){
+
 											isTutor = true;
-											course = courses.get(q);
+											course = courseItem;
 										}	
 									}
 									if(isTutor == true){
@@ -230,9 +232,10 @@ public class testOperations {
 											
 											Map<ICourseOffering, EvaluationTypes> evaluationList = studentInClass.getEvaluationEntities();
 											EvaluationTypes eTypes = evaluationList.get(course);
-											
+											try {
 											Map<ICourseOffering, Marks> marks = studentInClass.getPerCourseMarks();
 											Marks classMarks = marks.get(course);
+											
 											
 											String typeString = eTypes.getText();
 											System.out.println("Please input the evaluation entity:\n" + typeString);
@@ -243,7 +246,11 @@ public class testOperations {
 											double evaluationMark = Double.parseDouble(markString);
 											
 											classMarks.addToEvalStrategy(evaluationChanged, evaluationMark);
-											
+											}
+											catch(Exception e) {
+												System.out.println("There are no marks for this student");
+												break;
+											}
 											
 											if(studentInClass.getNotificationType().equals(NotificationTypes.EMAIL)){
 												System.out.println("The student has been notified via email that their mark has been changed for " + course.getCourseName() + ".");
@@ -289,10 +296,11 @@ public class testOperations {
 																		
 									boolean isTutor = false;
 									ICourseOffering course = null;
-									for(int q = 0; q <courses.size(); q++){
-										if(courses.get(q).getCourseID() == course_id){
+									for(ICourseOffering courseItem : courses){
+										if(courseItem.getCourseID().equalsIgnoreCase(course_id)){
+
 											isTutor = true;
-											course = courses.get(q);
+											course = courseItem;
 										}	
 									}
 									if(isTutor == true){
@@ -761,8 +769,12 @@ public class testOperations {
 //							"\nStudent ID : " + student.getID() + "\nStudent EvaluationType : " + 
 //							student.getEvaluationEntities().get(course) + "\n\n");
 					studentList.add(student);
-					if (student.getCoursesAllowed() == null)
+					if (student.getCoursesAllowed() == null) {
 						student.setCoursesAllowed(new ArrayList<ICourseOffering>());
+					}
+					if(student.getCoursesEnrolled() == null) {
+						student.setCoursesEnrolled(new ArrayList<ICourseOffering>());
+					}
 					student.getCoursesAllowed().add(course);
 					
 				}
