@@ -41,7 +41,7 @@ public class testOperations {
 		defaultAdmin.setSurname("admin");
 		defaultAdmin.setID("1");
 		adminList.add(defaultAdmin);
-			
+					
 		while(!online) {
 			
 			System.out.println("Enter user type: ");
@@ -163,7 +163,7 @@ public class testOperations {
 				
 				} else if(userType.equals("instructor")) {
 					
-					while(true){
+					while(!command.equals("exit")){
 					
 						System.out.println("Here is a list of commands: \n"
 							+ "add -> add a mark for a student in a class you tutor\n"
