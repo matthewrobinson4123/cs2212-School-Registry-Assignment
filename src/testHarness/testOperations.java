@@ -780,7 +780,8 @@ public class testOperations {
 //				System.out.println("ID : " + course.getCourseID() + "\nCourse name : " + course.getCourseName() + "\nSemester : " + 
 //				course.getSemester());
 //				System.out.println("Students allowed to enroll\n");
-				courseList.add(course);
+				if (!courseList.contains(course))
+					courseList.add(course);
 				
 				for(StudentModel student : course.getStudentsAllowedToEnroll()){
 //					System.out.println("Student name : " + student.getName() + "\nStudent surname : " + student.getSurname() + 
