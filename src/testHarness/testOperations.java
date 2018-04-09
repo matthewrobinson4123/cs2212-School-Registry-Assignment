@@ -168,7 +168,6 @@ public class testOperations {
 							+ "print -> print the class record for a class you tutor"
  							+ "exit -> returns to login screen while keeping system online");
 						
-											
 							boolean done;
 							command = read.next();
 							read.nextLine();
