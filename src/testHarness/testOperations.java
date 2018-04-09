@@ -168,8 +168,337 @@ public class testOperations {
 						System.out.println("Invalid command"); 
 						break;
 					}
-				
+					
 				} else if(userType.equals("instructor")) {
+					
+					while(!command.equals("exit")){
+					
+						System.out.println("Here is a list of commands: \n"
+							+ "add -> add a mark for a student in a class you tutor\n"
+							+ "modify -> modify a mark for a student in a class you tutor\n"
+							+ "final -> calculate the final mark for a student in a class you tutor\n"
+							+ "print -> print the class record for a class you tutor\n"
+ 							+ "exit -> returns to login screen while keeping system online");
+						
+							boolean done;
+							command = read.next();
+							read.nextLine();
+							switch(command) {
+											
+							case "add":
+							case "modify":
+								done = false;
+								while (!done) {
+									
+									List<ICourseOffering> courses = instructor.getIsTutorOf();
+
+									//for(int c = 0; c < courses.size(); c++){
+										//System.out.println(courses.get(c).getCourseName() + " " + courses.get(c).getCourseID() + "\n");
+									//}
+									
+									if(command.equals("add")){
+										System.out.println("\nEnter the ID for the course you'd like to add a students mark, or Enter to go back: ");
+									}else{
+										System.out.println("\nEnter the ID for the course you'd like to modify a students mark, or Enter to go back: ");
+									}
+									String course_id = read.nextLine();
+
+									if (course_id.equals(""))
+										break;
+																		
+									boolean isTutor = false;
+									ICourseOffering course = null;
+									for(ICourseOffering courseItem : courses){
+										if(courseItem.getCourseID().equalsIgnoreCase(course_id)){
+
+											isTutor = true;
+											course = courseItem;
+										}	
+									}
+									if(isTutor == true){
+
+										if(command.equals("add")){
+											System.out.println("Enter the ID for the student you would like to add a mark for: ");
+										}else{
+											System.out.println("Enter the ID for the student you would like to modify a mark for: ");
+										}
+										String student_id = read.nextLine();	
+										
+										List<StudentModel> students = course.getStudentsEnrolled();
+										boolean isStudent = false;
+										StudentModel studentInClass = null;
+
+										for(int s = 0; s <students.size(); s++){
+											if(students.get(s).getID().equals(student_id)){
+												isStudent = true;
+												studentInClass = students.get(s);
+											}	
+										}
+										if(isStudent == true){
+											
+											Map<ICourseOffering, EvaluationTypes> evaluationList = studentInClass.getEvaluationEntities();
+											EvaluationTypes eTypes = evaluationList.get(course);
+											
+											Map<ICourseOffering, Marks> marks = studentInClass.getPerCourseMarks();
+											
+											Marks classMarks = null;
+											
+											if(marks.get(course) == null){
+												classMarks = new Marks();
+												marks.put(course, classMarks);
+											}else{
+												classMarks = marks.get(course);
+											}
+											
+											String typeString = eTypes.getText();
+											System.out.println("Please input the evaluation entity:\n");
+											String evaluationChanged = read.nextLine();
+											
+											System.out.println("Please input the mark for the evaluation entity: ");
+											String markString = read.nextLine();
+											double evaluationMark = Double.parseDouble(markString);
+											
+											classMarks.addToEvalStrategy(evaluationChanged, evaluationMark);
+											
+											marks.put(course, classMarks);
+											
+											if(studentInClass.getNotificationType().equals(NotificationTypes.EMAIL)){
+												System.out.println("The student has been notified via email that their mark has been changed for " + course.getCourseName() + ".");
+											}else if(studentInClass.getNotificationType().equals(NotificationTypes.CELLPHONE)){
+												System.out.println("The student has been notified via cellphone that their mark has been changed for " + course.getCourseName() + ".");
+											}else if(studentInClass.getNotificationType().equals(NotificationTypes.PIGEON_POST)){
+												System.out.println("The student has been notified via pigeon post that their mark has been changed for " + course.getCourseName() + ".");
+											}
+											
+										} else{
+											System.out.println("Invalid student ID inputted.\n");
+											done = true;
+											break;
+										}
+										
+									}else{
+										System.out.println("Invalid course ID inputted.\n");
+										done = true;
+										break;
+									}
+																		
+								}
+								break;
+
+
+
+							case "final":
+								done = false;
+								while (!done) {
+									
+									List<ICourseOffering> courses = instructor.getIsTutorOf();
+									
+									/*for(int c = 0; c < courses.size(); c++){
+										System.out.println(courses.get(c).getCourseName() + " " + courses.get(c).getCourseID() + "\n");
+									}*/
+
+									System.out.println("Enter the ID for the course you'd like to calculate a student's final mark, or Enter to go back: ");
+
+									String course_id = read.nextLine();
+
+									if (course_id.equals(""))
+										break;
+																		
+									boolean isTutor = false;
+									ICourseOffering course = null;
+									for(ICourseOffering courseItem : courses){
+										if(courseItem.getCourseID().equalsIgnoreCase(course_id)){
+
+											isTutor = true;
+											course = courseItem;
+										}	
+									}
+									if(isTutor == true){
+										
+										System.out.println("Enter the ID of the student whose final mark you want to calculate: ");
+
+										String student_id = read.nextLine();	
+										
+										List<StudentModel> students = course.getStudentsEnrolled();
+										boolean isStudent = false;
+										StudentModel studentInClass = null;
+
+										for(StudentModel studentItem : students){
+											if(studentItem.getID().equalsIgnoreCase(student_id)){
+												isStudent = true;
+												studentInClass = studentItem;
+											}
+										}
+										if(isStudent == true){
+//				****					****					****					****					****				****				****
+
+											CourseOffering courseReal = (CourseOffering) course;
+											courseReal.calculateFinalGrade(studentInClass.getID());
+											
+											//Confirmation statement of final grade calculated.
+											
+										} else{
+											System.out.println("Invalid student ID inputted.\n");
+											done = true;
+											break;
+										}
+										
+									} else{
+										System.out.println("Invalid course ID inputted.\n");
+										done = true;
+										break;
+									}
+									
+									
+								}
+								break;
+
+								
+							case "print":
+								done = false;
+								while (!done) {
+									
+									List<ICourseOffering> courses = instructor.getIsTutorOf();
+									
+									/*for(int c = 0; c < courses.size(); c++){
+										System.out.println(courses.get(c).getCourseName() + " " + courses.get(c).getCourseID() + "\n");
+									}*/
+
+									System.out.println("Enter the ID for the course you'd like to print records for, or Enter to go back: ");
+
+									String course_id = read.nextLine();
+
+									if (course_id.equals(""))
+										break;
+																		
+									boolean isTutor = false;
+									ICourseOffering course = null;
+									for(ICourseOffering courseItem : courses){
+										if(courseItem.getCourseID().equalsIgnoreCase(course_id)){
+
+											isTutor = true;
+											course = courseItem;
+										}	
+									}
+									if(isTutor == true){
+										
+										System.out.println("To print records for all students input 'all', or 'choose' for individual records: ");
+										String recordType = read.nextLine();
+
+										if(recordType.equals("choose")){
+																						
+											System.out.println("Enter the ID for the student you would like to print records for, or 'exit' to finish: ");
+											
+											String student_id = read.nextLine();
+											
+											while(!student_id.equals("exit")){
+												
+												List<StudentModel> students = course.getStudentsEnrolled();
+												boolean isStudent = false;
+												StudentModel studentInClass = null;
+		
+												/*for(int s = 0; s <students.size(); s++){
+													if(students.get(s).getID() == student_id){
+														isStudent = true;
+														studentInClass = students.get(s);
+													}	
+												}*/
+												
+												for(StudentModel studentItem : students){
+													if(studentItem.getID().equalsIgnoreCase(student_id)){
+														isStudent = true;
+														studentInClass = studentItem;
+													}
+												}
+												
+												if(isStudent == true){
+													
+													CourseOffering courseReal = (CourseOffering) course;
+													courseReal.calculateFinalGrade(studentInClass.getID());
+													
+													int studentInClassID = Integer.parseInt(studentInClass.getID());
+													StudentModel studentLoop = students.get(studentInClassID);
+													Map<ICourseOffering, Marks> studentMarksMap = studentLoop.getPerCourseMarks();
+													Marks studentMarks = studentMarksMap.get(course);
+													studentMarks.initializeIterator();
+													
+													String marksIter = null;
+													
+													while(studentMarks.hasNext()){
+														marksIter = marksIter + " " + studentMarks.getCurrentKey() + " : " + studentMarks.getCurrentValue() + " ;";
+														studentMarks.next();
+													}
+													
+													System.out.println("Name: " + studentLoop.getName() + " " + studentLoop.getSurname() + ", ID: " + studentLoop.getID() + "\n   Course Marks: " + marksIter);
+													
+													
+													//Confirmation statement of final grade calculated.
+													
+												} else{
+													System.out.println("Invalid student ID inputted.\n");
+													done = true;
+													break;
+												}
+												
+												System.out.println("Enter the ID for the student you would like to print records for, or 'exit' to finish: ");
+												
+												student_id = read.next();	
+												
+											}
+										} else if(recordType.equals("all")){
+											
+											CourseOffering courseReal = (CourseOffering) course;
+											courseReal.calculateFinalGrades();
+											
+											List<StudentModel> students = course.getStudentsEnrolled();
+											for(int s = 0; s <students.size(); s++){
+												
+												StudentModel studentLoop = students.get(s);
+												Map<ICourseOffering, Marks> studentMarksMap = studentLoop.getPerCourseMarks();
+												Marks studentMarks = studentMarksMap.get(course);
+												studentMarks.initializeIterator();
+												
+												String marksIter = null;
+												
+												while(studentMarks.hasNext()){
+													marksIter = marksIter + " " + studentMarks.getCurrentKey() + " : " + studentMarks.getCurrentValue() + " ;";
+												}
+												
+												System.out.println(s+1 + " - Name: " + studentLoop.getName() + " " + studentLoop.getSurname() + " " + studentLoop.getID() + "\n   Course Marks: " + marksIter);
+												
+											}
+										} else{
+											System.out.println("Invalid option inputted.\n");
+											done = true;
+											break;											
+										}
+										
+									} else{
+										System.out.println("Invalid course ID inputted.\n");
+										done = true;
+										break;
+									}
+									
+								}
+								break;
+
+
+								
+							case "exit":
+
+								System.out.println("Logging out. Goodbye.");
+						 		instructor = null;
+						 		break;
+						 		
+							default:
+								System.out.println("Invalid command");
+								break;
+						
+						}
+					}		
+				}
+				
+/*				} else if(userType.equals("instructor")) {
 					
 					while(!command.equals("exit")){
 					
@@ -482,7 +811,7 @@ public class testOperations {
 						
 						}
 					}		
-				} else if(userType.equals("student")) {
+				}*/ else if(userType.equals("student")) {
 					
 					System.out.println("Here is a list of commands: \n"
 							+ "enroll -> enroll in a course\n"
