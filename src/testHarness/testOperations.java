@@ -124,33 +124,31 @@ public class testOperations {
 						
 						StudentModel studentEnroll = null;
 						CourseOffering course = null;
-						String ID = read.next();
 						
-						System.out.println("Enter the ID number of the student you wish to enroll: ");
+						System.out.println("Enter course ID to enroll student in");
+						String ID = read.nextLine();
 						
-						
-						for(StudentModel stu : studentList) {
-							if(stu.getID() == ID) studentEnroll = stu; 
+						for(CourseOffering off : courseList) {
+							if(off.getCourseID().equals(ID)) course = off;
 						}
 						
-						if(studentEnroll == null) {
-							System.out.print("Student not found");
+						if(course == null) {
+							System.out.println("Not a valid course code");
 						} else {
-							
-							System.out.println("Enter course ID to enroll student in");
+							List<StudentModel> allowedList = course.getStudentsAllowedToEnroll();
+							System.out.println("Enter the ID of the student you would like to enroll:");
 							ID = read.next();
-							
-							for(CourseOffering off : courseList) {
-								if(off.getCourseID() == ID) course = off;
+							for(StudentModel stu : studentList) {
+								if(stu.getID().equals(ID)) studentEnroll = stu; 
 							}
-							
-							if(course == null) {
-								System.out.println("Not a valid course code");
+							if(studentEnroll == null) {
+								System.out.println("Student not found/allowed to enroll");
 							} else {
-								List<ICourseOffering> courses = studentEnroll.getCoursesEnrolled();
-								courses.add(course);
-								studentEnroll.setCoursesEnrolled(courses);
-								System.out.println("Student enrolled in course");
+								List<ICourseOffering> coursesEnrolled = studentEnroll.getCoursesEnrolled();
+								coursesEnrolled.add(course);
+								List<StudentModel> enrolledList = course.getStudentsEnrolled();
+								enrolledList.add(studentEnroll);
+								System.out.println("Student enrolled");
 							}
 						}
 						break;
@@ -172,7 +170,6 @@ public class testOperations {
 							+ "print -> print the class record for a class you tutor"
  							+ "exit -> returns to login screen while keeping system online");
 						
-											
 							boolean done;
 							command = read.nextLine();
 							read.nextLine();
