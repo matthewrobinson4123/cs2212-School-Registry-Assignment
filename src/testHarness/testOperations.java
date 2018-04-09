@@ -169,7 +169,7 @@ public class testOperations {
 						break;
 					}
 					
-				} else if(userType.equals("instructor")) {
+				}else if(userType.equals("instructor")) {
 					
 					while(!command.equals("exit")){
 					
@@ -192,9 +192,6 @@ public class testOperations {
 									
 									List<ICourseOffering> courses = instructor.getIsTutorOf();
 
-									//for(int c = 0; c < courses.size(); c++){
-										//System.out.println(courses.get(c).getCourseName() + " " + courses.get(c).getCourseID() + "\n");
-									//}
 									
 									if(command.equals("add")){
 										System.out.println("\nEnter the ID for the course you'd like to add a students mark, or Enter to go back: ");
@@ -291,8 +288,9 @@ public class testOperations {
 								done = false;
 								while (!done) {
 									
-									List<ICourseOffering> courses = instructor.getIsTutorOf();
+									try{
 									
+									List<ICourseOffering> courses = instructor.getIsTutorOf();
 
 									System.out.println("Enter the ID for the course you'd like to calculate a student's final mark, or Enter to go back: ");
 
@@ -327,12 +325,11 @@ public class testOperations {
 											}
 										}
 										if(isStudent == true){
-//				****					****					****					****					****				****				****
 
 											CourseOffering courseReal = (CourseOffering) course;
-											courseReal.calculateFinalGrade(studentInClass.getID());
+											double grade = courseReal.calculateFinalGrade(studentInClass.getID());
 											
-											//Confirmation statement of final grade calculated.
+											System.out.println("The final grade for the student is: " + (grade/100) + ".\n");
 											
 										} else{
 											System.out.println("Invalid student ID inputted.\n");
@@ -346,7 +343,10 @@ public class testOperations {
 										break;
 									}
 									
-									
+									}catch (Exception e){
+										System.out.println("Not all marks have been inputted for the student. A final grade cannot be calculated.");
+										break;
+									}
 								}
 								break;
 
@@ -356,10 +356,7 @@ public class testOperations {
 								while (!done) {
 									
 									List<ICourseOffering> courses = instructor.getIsTutorOf();
-									
-									/*for(int c = 0; c < courses.size(); c++){
-										System.out.println(courses.get(c).getCourseName() + " " + courses.get(c).getCourseID() + "\n");
-									}*/
+
 
 									System.out.println("Enter the ID for the course you'd like to print records for, or Enter to go back: ");
 
@@ -379,7 +376,7 @@ public class testOperations {
 									}
 									if(isTutor == true){
 										
-										System.out.println("To print records for all students input 'all', or 'choose' for individual records: ");
+										System.out.println("To print records student records input 'all' for all records or input 'choose' for individual records: ");
 										String recordType = read.nextLine();
 
 										if(recordType.equals("choose")){
@@ -393,13 +390,6 @@ public class testOperations {
 												List<StudentModel> students = course.getStudentsEnrolled();
 												boolean isStudent = false;
 												StudentModel studentInClass = null;
-		
-												/*for(int s = 0; s <students.size(); s++){
-													if(students.get(s).getID() == student_id){
-														isStudent = true;
-														studentInClass = students.get(s);
-													}	
-												}*/
 												
 												for(StudentModel studentItem : students){
 													if(studentItem.getID().equalsIgnoreCase(student_id)){
@@ -413,23 +403,21 @@ public class testOperations {
 													CourseOffering courseReal = (CourseOffering) course;
 													courseReal.calculateFinalGrade(studentInClass.getID());
 													
-													int studentInClassID = Integer.parseInt(studentInClass.getID());
-													StudentModel studentLoop = students.get(studentInClassID);
-													Map<ICourseOffering, Marks> studentMarksMap = studentLoop.getPerCourseMarks();
+													
+													Map<ICourseOffering, Marks> studentMarksMap = studentInClass.getPerCourseMarks(); //studentLoop.getPerCourseMarks();
 													Marks studentMarks = studentMarksMap.get(course);
 													studentMarks.initializeIterator();
 													
-													String marksIter = null;
+													String marksIter = "";
 													
 													while(studentMarks.hasNext()){
-														marksIter = marksIter + " " + studentMarks.getCurrentKey() + " : " + studentMarks.getCurrentValue() + " ;";
 														studentMarks.next();
+														marksIter += " " + studentMarks.getCurrentKey() + " " + studentMarks.getCurrentValue() + "; ";
 													}
 													
-													System.out.println("Name: " + studentLoop.getName() + " " + studentLoop.getSurname() + ", ID: " + studentLoop.getID() + "\n   Course Marks: " + marksIter);
+													System.out.println("Name: " + studentInClass.getName() + " " + studentInClass.getSurname() + ", ID: " + studentInClass.getID() + "\n   Course Marks: " + marksIter);
 													
 													
-													//Confirmation statement of final grade calculated.
 													
 												} else{
 													System.out.println("Invalid student ID inputted.\n");
@@ -443,6 +431,8 @@ public class testOperations {
 												
 											}
 										} else if(recordType.equals("all")){
+											
+											try{
 											
 											CourseOffering courseReal = (CourseOffering) course;
 											courseReal.calculateFinalGrades();
@@ -459,10 +449,15 @@ public class testOperations {
 												
 												while(studentMarks.hasNext()){
 													marksIter = marksIter + " " + studentMarks.getCurrentKey() + " : " + studentMarks.getCurrentValue() + " ;";
+													studentMarks.next();
 												}
 												
 												System.out.println(s+1 + " - Name: " + studentLoop.getName() + " " + studentLoop.getSurname() + " " + studentLoop.getID() + "\n   Course Marks: " + marksIter);
 												
+											}
+											}catch (Exception e){
+												System.out.println("Not all marks have been inputted for persons enrolled in the class.");
+												break;
 											}
 										} else{
 											System.out.println("Invalid option inputted.\n");

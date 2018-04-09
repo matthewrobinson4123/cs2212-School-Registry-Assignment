@@ -42,6 +42,8 @@ public interface ICourseOffering {
 
 	void removeInstructor(InstructorModel instructor);
 	
+	double calculateFinalGrade(String ID);
+	
 //	String getCourseName();
 //	String getCourseID();
 //	Integer getSemester();

@@ -88,7 +88,7 @@ public class CourseOffering implements ICourseOffering{
 //	Calculates the Final Grades using the Weights and Marks utility classes see the comments in 
 //	these classes if unsure of how this works
 	public void calculateFinalGrades(){
-		Double finalGrade; 
+		double finalGrade; 
 		for(StudentModel studentModel : studentsEnrolled){
 			finalGrade = 0D;
 			Weights weights = evaluationStrategies.get(studentModel.getEvaluationEntities().get(this));
@@ -103,7 +103,7 @@ public class CourseOffering implements ICourseOffering{
 
 //	Calculates the Final Grades using the Weights and Marks utility classes see the comments in 
 //	these classes if unsure of how this works
-	public void calculateFinalGrade(String ID){
+	public double calculateFinalGrade(String ID){
 		StudentModel target = null;
 		Double finalGrade;
 		for(StudentModel studentModel : studentsEnrolled)
@@ -117,6 +117,7 @@ public class CourseOffering implements ICourseOffering{
 			weights.next();
 			finalGrade += weights.getCurrentValue() * marks.getValueWithKey(weights.getCurrentKey());
 		}
+		return finalGrade;
 	}
 	
 }
