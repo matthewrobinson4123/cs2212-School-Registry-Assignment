@@ -364,14 +364,12 @@ public class testOperations {
 										String recordType = read.next();
 
 										if(recordType.equals("choose")){
+																						
+											System.out.println("Enter the ID for the student you would like to print records for, or 'exit' to finish: ");
 											
-											String loopID = null;
+											String student_id = read.next();
 											
-											while(loopID.equals("exit")){
-											
-												System.out.println("Enter the ID for the student you would like to print records for, or 'exit' to finish: ");
-		
-												String student_id = read.next();	
+											while(!student_id.equals("exit")){
 												
 												List<StudentModel> students = course.getStudentsEnrolled();
 												boolean isStudent = false;
@@ -410,6 +408,11 @@ public class testOperations {
 													done = true;
 													break;
 												}
+												
+												System.out.println("Enter the ID for the student you would like to print records for, or 'exit' to finish: ");
+												
+												student_id = read.next();	
+												
 											}
 										} else if(recordType.equals("all")){
 											
