@@ -786,22 +786,27 @@ public class testOperations {
 //					System.out.println("Student name : " + student.getName() + "\nStudent surname : " + student.getSurname() + 
 //							"\nStudent ID : " + student.getID() + "\nStudent EvaluationType : " + 
 //							student.getEvaluationEntities().get(course) + "\n\n");
-					studentList.add(student);
-					if (student.getCoursesAllowed() == null) {
-						student.setCoursesAllowed(new ArrayList<ICourseOffering>());
+					if (!studentList.contains(student)) {
+						studentList.add(student);
+						if (student.getCoursesAllowed() == null) {
+							student.setCoursesAllowed(new ArrayList<ICourseOffering>());
+						}
+						if(student.getCoursesEnrolled() == null) {
+							student.setCoursesEnrolled(new ArrayList<ICourseOffering>());
+						}
+						student.getCoursesAllowed().add(course);
 					}
-					if(student.getCoursesEnrolled() == null) {
-						student.setCoursesEnrolled(new ArrayList<ICourseOffering>());
-					}
-					student.getCoursesAllowed().add(course);
+					
 					
 				}
 				
 				for (InstructorModel instructor : course.getInstructor()) {
-					instructorList.add(instructor);
-					if (instructor.getIsTutorOf() == null)
-						instructor.setIsTutorOf(new ArrayList<ICourseOffering>());
-					instructor.getIsTutorOf().add(course);
+					if (!instructorList.contains(instructor)) {
+						instructorList.add(instructor);
+						if (instructor.getIsTutorOf() == null)
+							instructor.setIsTutorOf(new ArrayList<ICourseOffering>());
+						instructor.getIsTutorOf().add(course);
+					}
 				}
 				
 //				for(StudentModel student : course.getStudentsAllowedToEnroll()){
