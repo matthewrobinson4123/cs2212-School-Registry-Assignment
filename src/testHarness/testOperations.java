@@ -398,6 +398,7 @@ public class testOperations {
 													
 													while(studentMarks.hasNext()){
 														marksIter = marksIter + " " + studentMarks.getCurrentKey() + " : " + studentMarks.getCurrentValue() + " ;";
+														studentMarks.next();
 													}
 													
 													System.out.println("Name: " + studentLoop.getName() + " " + studentLoop.getSurname() + ", ID: " + studentLoop.getID() + "\n   Course Marks: " + marksIter);
