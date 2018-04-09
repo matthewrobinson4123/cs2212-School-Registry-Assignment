@@ -293,9 +293,6 @@ public class testOperations {
 									
 									List<ICourseOffering> courses = instructor.getIsTutorOf();
 									
-									/*for(int c = 0; c < courses.size(); c++){
-										System.out.println(courses.get(c).getCourseName() + " " + courses.get(c).getCourseID() + "\n");
-									}*/
 
 									System.out.println("Enter the ID for the course you'd like to calculate a student's final mark, or Enter to go back: ");
 
@@ -798,16 +795,12 @@ public class testOperations {
 			// code to perform sanity checking of all our code
 			// by printing all of the data that we've loaded
 			for(CourseOffering course : ModelRegister.getInstance().getAllCourses()){
-//				System.out.println("ID : " + course.getCourseID() + "\nCourse name : " + course.getCourseName() + "\nSemester : " + 
-//				course.getSemester());
-//				System.out.println("Students allowed to enroll\n");
+
 				if (!courseList.contains(course))
 					courseList.add(course);
 				
 				for(StudentModel student : course.getStudentsAllowedToEnroll()){
-//					System.out.println("Student name : " + student.getName() + "\nStudent surname : " + student.getSurname() + 
-//							"\nStudent ID : " + student.getID() + "\nStudent EvaluationType : " + 
-//							student.getEvaluationEntities().get(course) + "\n\n");
+
 					if (!studentList.contains(student)) {
 						studentList.add(student);
 						if (student.getCoursesAllowed() == null)
@@ -817,6 +810,8 @@ public class testOperations {
 						student.getCoursesAllowed().add(course);
 						if (student.getPerCourseMarks() == null)
 							student.setPerCourseMarks(new HashMap<ICourseOffering, Marks>());
+						if(student.getNotificationType() == null)
+							student.setNotificationType(NotificationTypes.EMAIL);
 					}
 					
 					
@@ -831,10 +826,7 @@ public class testOperations {
 					}
 				}
 				
-//				for(StudentModel student : course.getStudentsAllowedToEnroll()){
-//					for(ICourseOffering course2 : student.getCoursesAllowed())
-//					System.out.println(student.getName() + "\t\t -> " + course2.getCourseName());
-//				}
+
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("Files for populating the lists were not found (names note_1.txt and note_2.txt)");
