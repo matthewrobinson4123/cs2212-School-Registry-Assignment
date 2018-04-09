@@ -789,13 +789,13 @@ public class testOperations {
 //							student.getEvaluationEntities().get(course) + "\n\n");
 					if (!studentList.contains(student)) {
 						studentList.add(student);
-						if (student.getCoursesAllowed() == null) {
+						if (student.getCoursesAllowed() == null)
 							student.setCoursesAllowed(new ArrayList<ICourseOffering>());
-						}
-						if(student.getCoursesEnrolled() == null) {
+						if(student.getCoursesEnrolled() == null)
 							student.setCoursesEnrolled(new ArrayList<ICourseOffering>());
-						}
 						student.getCoursesAllowed().add(course);
+						if (student.getPerCourseMarks() == null)
+							student.setPerCourseMarks(new HashMap<ICourseOffering, Marks>());
 					}
 					
 					
