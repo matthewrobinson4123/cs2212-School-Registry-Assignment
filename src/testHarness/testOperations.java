@@ -148,10 +148,15 @@ public class testOperations {
 							if(studentEnroll == null) {
 								System.out.println("Student not found/allowed to enroll");
 							} else {
-								List<ICourseOffering> coursesEnrolled = studentEnroll.getCoursesEnrolled();
-								coursesEnrolled.add(course);
-								List<StudentModel> enrolledList = course.getStudentsEnrolled();
-								enrolledList.add(studentEnroll);
+								List<StudentModel> eStu = course.getStudentsEnrolled();
+								for(StudentModel e : eStu) {
+									if(e.getID().equals(ID)) {
+										System.out.println("Student already enrolled");
+										break;
+									}
+								}
+								studentEnroll.getCoursesEnrolled().add(course);
+								course.getStudentsEnrolled().add(studentEnroll);
 								System.out.println("Student enrolled");
 							}
 						}
