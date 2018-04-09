@@ -125,7 +125,7 @@ public class testOperations {
 						StudentModel studentEnroll = null;
 						CourseOffering course = null;
 						
-						System.out.println("Enter course ID to enroll student in");
+						System.out.println("Enter course ID to enroll student in: ");
 						String ID = read.nextLine();
 						
 						for(CourseOffering off : courseList) {
@@ -138,16 +138,15 @@ public class testOperations {
 							List<StudentModel> allowedList = course.getStudentsAllowedToEnroll();
 							System.out.println("Enter the ID of the student you would like to enroll:");
 							ID = read.next();
-							for(StudentModel stu : studentList) {
+							for(StudentModel stu : allowedList) {
+								System.out.println(stu.getID());
 								if(stu.getID().equals(ID)) studentEnroll = stu; 
 							}
 							if(studentEnroll == null) {
 								System.out.println("Student not found/allowed to enroll");
 							} else {
-								List<ICourseOffering> coursesEnrolled = studentEnroll.getCoursesEnrolled();
-								coursesEnrolled.add(course);
-								List<StudentModel> enrolledList = course.getStudentsEnrolled();
-								enrolledList.add(studentEnroll);
+								studentEnroll.getCoursesEnrolled().add(course);
+								course.getStudentsEnrolled().add(studentEnroll);
 								System.out.println("Student enrolled");
 							}
 						}
